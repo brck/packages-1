@@ -8,15 +8,13 @@
 
 include $(TOPDIR)/rules.mk
 
-include $(TOPDIR)/rules.mk
-
 PKG_NAME:=python-click
 PKG_VERSION:=6.7
 PKG_RELEASE:=2
 
 PKG_SOURCE:=click-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897
-PKG_SHA256SUM:=f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b
+PKG_HASH:=f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/click-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
@@ -55,6 +53,7 @@ define Package/python-click
 endef
 
 define Package/python3-click
+	$(call Package/python-click/Default)
 	TITLE:=python3-click
 	VARIANT:=python3
 endef
