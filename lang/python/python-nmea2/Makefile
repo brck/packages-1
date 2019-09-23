@@ -63,7 +63,7 @@ define Package/python-pynmea2/description
 endef
 
 define Package/python3-pynmea2/description
-	$(call Package/python-nmea2/description)
+	$(call Package/python-pynmea2/description)
 	Variant for Python 3.
 endef
 
