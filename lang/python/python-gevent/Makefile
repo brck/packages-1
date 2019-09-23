@@ -42,7 +42,6 @@ define Package/python-gevent
 	SECTION:=lang
 	CATEGORY:=Languages
 	SUBMENU:=Python
-	TITLE:=python-gevent
 	URL:=http://www.gevent.org/
 	DEPENDS:=+python +python-greenlet
 endef
