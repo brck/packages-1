@@ -5,6 +5,8 @@
 # See /LICENSE for more information.
 #
 
+include $(TOPDIR)/rules.mk
+
 PKG_NAME:=python-markupsafe
 PKG_VERSION:=1.1.1
 PKG_RELEASE:=1
