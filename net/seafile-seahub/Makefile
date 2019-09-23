@@ -31,7 +31,7 @@ define Package/seafile-seahub
 		+django-compressor +django-constance +django-formtools +django-jsonfield \
 		+django-picklefield +django-postoffice +django-restframework \
 		+django-simple-captcha +django-statici18n +django-webpack-loader \
-		+flup +gunicorn +openpyxl +python-dateutil +python-mysql \
+		+flup +python-gunicorn +openpyxl +python-dateutil +python-mysql \
 		+python-qrcode +python-requests +python-requests-oauthlib +python-pytz
 endef
 
