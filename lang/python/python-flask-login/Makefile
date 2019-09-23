@@ -37,7 +37,6 @@ define Package/python-flask-login/Default
 	SECTION:=language-python
 	CATEGORY:=Languages
 	SUBMENU:=Python
-	TITLE:=Python Flask-Login
 	URL:=https://github.com/maxcountryman/flask-login
 	MAINTAINER:=BRCK <dev@brck.com>
 	DEPENDS:=+python +python-flask
@@ -45,11 +44,13 @@ endef
 
 define Package/python-flask-login
 	$(call Package/python-flask-login/Default)
+	TITLE:=python-flask-login
 	VARIANT:=python
 endef
 
 define Package/python3-flask-login
 	$(call Package/python-flask-login/Default)
+	TITLE:=python3-flask-login
 	VARIANT:=python3
 endef
 

@@ -37,7 +37,6 @@ define Package/python-flask-sqlalchemy/Default
 	SECTION:=lang
 	CATEGORY:=Languages
 	SUBMENU:=Python
-	TITLE:=Python Flask-SQLAlchemy
 	URL:=https://github.com/pallets/flask-sqlalchemy
 	MAINTAINER:=BRCK <dev@brck.com>
 	DEPENDS:=+python +python-flask +python-sqlalchemy
@@ -45,11 +44,13 @@ endef
 
 define Package/python-flask-sqlalchemy
 	$(call Package/python-flask-sqlalchemy/Default)
+	TITLE:=Python Flask-SQLAlchemy
 	VARIANT:=python
 endef
 
 define Package/python3-flask-sqlalchemy
 	$(call Package/python-flask-sqlalchemy/Default)
+	TITLE:=Python3 Flask-SQLAlchemy
 	VARIANT:=python3
 endef
 

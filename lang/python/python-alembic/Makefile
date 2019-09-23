@@ -31,7 +31,6 @@ define Package/python-alembic/Default
 	SECTION:=lang
 	CATEGORY:=Languages
 	SUBMENU:=Python
-	TITLE:=Python Alembic
 	URL:=https://alembic.sqlalchemy.org/
 	MAINTAINER:=BRCK <dev@brck.com>
 	DEPENDS:=+python +python-mako +python-dateutil +python-editor +python-sqlalchemy

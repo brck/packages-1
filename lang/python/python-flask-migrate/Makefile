@@ -37,19 +37,19 @@ define Package/python-flask-migrate/Default
 	SECTION:=lang
 	CATEGORY:=Languages
 	SUBMENU:=Python
-	TITLE:=Python Flask-Migrate
-	URL:=http://github.com/miguelgrinberg/flask-migrate/
 	MAINTAINER:=BRCK <dev@brck.com>
 	DEPENDS:=+python +python-flask +python-alembic +python-flask-sqlalchemy
 endef
 
 define Package/python-flask-migrate
 	$(call Package/python-flask-migrate/Default)
+	TITLE:=Python Flask-Migrate
 	VARIANT:=python
 endef
 
 define Package/python3-flask-migrate
 	$(call Package/python-flask-migrate/Default)
+	TITLE:=Python3 Flask-Migrate
 	VARIANT:=python3
 endef
 

@@ -36,7 +36,6 @@ define Package/python-eventlet
 	SECTION:=lang
 	CATEGORY:=Languages
 	SUBMENU:=Python
-	TITLE:=PythonEventlet
 	URL:=https://pypi.python.org/pypi/eventlet/
 endef
  
