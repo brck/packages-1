@@ -36,7 +36,7 @@ else
         $(call include_mk, python3-package.mk)
 endif
 
-define Package/python-nmea2/Default
+define Package/python-pynmea2/Default
 	SECTION:=lang
 	CATEGORY:=Languages
 	SUBMENU:=Python
@@ -46,15 +46,15 @@ define Package/python-nmea2/Default
 endef
 
 
-define Package/python-nmea2
-	$(call Package/python-nmea2/Default)
-	TITLE:=python-nmea2
+define Package/python-pynmea2
+	$(call Package/python-pynmea2/Default)
+	TITLE:=python-pynmea2
 	VARIANT:=python
 endef
 
-define Package/python3-nmea2
-	$(call Package/python-nmea2/Default)
-	TITLE:=python3-nmea2
+define Package/python3-pynmea2
+	$(call Package/python-pynmea2/Default)
+	TITLE:=python3-pynmea2
 	VARIANT:=python3
 endef
 
@@ -62,12 +62,12 @@ define Package/python-pynmea2/description
 	Python library for parsing the NMEA 0183 protocol (GPS)
 endef
 
-define Package/python3-nmea2/description
+define Package/python3-pynmea2/description
 	$(call Package/python-nmea2/description)
 	Variant for Python 3.
 endef
 
-$(eval $(call PyPackage,python-nmea2))
-$(eval $(call BuildPackage,python-nmea2))
-$(eval $(call Py3Package,python3-nmea2))
-$(eval $(call BuildPackage,python3-nmea2))
+$(eval $(call PyPackage,python-pynmea2))
+$(eval $(call BuildPackage,python-pynmea2))
+$(eval $(call Py3Package,python3-pynmea2))
+$(eval $(call BuildPackage,python3-pynmea2))
