@@ -9,7 +9,7 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=Cython
+PKG_NAME:=python-cython
 PKG_VERSION:=0.29.13
 PKG_RELEASE:=1
 
@@ -35,28 +35,51 @@ else
         $(call include_mk, python3-package.mk)
 endif
 
-define Package/cython
+define Package/python-cython
   SUBMENU:=Python
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=cython
+  TITLE:=python-cython
   URL:=http://www.cython.org
   DEPENDS:=+python
 endef
 
-define Package/cython/description
+define Package/python-cython/description
   Cython is a language that should make writing C extensions for the Python language easier
 endef
 
 define Build/Compile
-	$(call Build/Compile/PyMod,,install --no-cython-compile --prefix="$(PKG_INSTALL_DIR)/usr") 
+	$(call Build/Compile/PyMod,,install --no-cython-compile --prefix="$(PKG_INSTALL_DIR)/usr")
 endef
 
 define Build/InstallDev
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(CP) \
-	    $(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
-	    $(1)$(PYTHON_PKG_DIR)
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
+		$(1)$(PYTHON_PKG_DIR)
 endef
 
-$(eval $(call BuildPackage,cython))
+define Host/Compile/PyMod
+	$(call HostPython, \
+		cd $(HOST_BUILD_DIR)/$(strip $(1)); \
+		CFLAGS="$(HOST_CFLAGS)" \
+		CPPFLAGS="$(HOST_CPPFLAGS)" \
+		LDFLAGS="$(HOST_LDFLAGS)" \
+		$(3) \
+		, \
+		./setup.py $(2))
+endef
+
+
+define Host/Compile
+	$(call Host/Compile/PyMod,, \
+		install --no-cython-compile \
+		--prefix="/usr" \
+		--root="$(STAGING_DIR_HOST)")
+endef
+
+define Host/Install
+endef
+
+$(eval $(call HostBuild))
+$(eval $(call BuildPackage,python-cython))
