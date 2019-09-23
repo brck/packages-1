@@ -7,20 +7,21 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=gunicorn
-PKG_VERSION:=19.9.0
-PKG_RELEASE=2
-PKG_LICENSE:=MIT
+PKG_NAME:=python-gunicorn
+PKG_VERSION:=19.2.0
+PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/source/g/gunicorn
-PKG_HASH:=fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3
-PKG_MAINTAINER:=Alexandru Ardelean <ardeleanalex@gmail.com>
+PKG_SOURCE:=gunicorn-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=https://pypi.python.org/packages/source/g/gunicorn/
+PKG_MD5SUM:=010e23e52324375ed9e2265d6e3be692
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/gunicorn-$(PKG_VERSION)
+PKG_BUILD_DEPENDS:=python
 
 include $(INCLUDE_DIR)/package.mk
 include ../python-package.mk
 
-define Package/gunicorn
+define Package/python-gunicorn
     SUBMENU:=Python
     SECTION:=lang
     CATEGORY:=Languages
@@ -29,7 +30,7 @@ define Package/gunicorn
     DEPENDS:=+python +python-setuptools
 endef
 
-define Package/gunicorn/description
+define Package/python-gunicorn/description
     WSGI HTTP Server for UNIX
 endef
 
@@ -37,7 +38,7 @@ define Build/Compile
 	$(call Build/Compile/PyMod,,install --prefix=/usr --root=$(PKG_INSTALL_DIR))
 endef
 
-define Package/gunicorn/install
+define Package/python-gunicorn/install
 	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) \
@@ -49,4 +50,4 @@ define Package/gunicorn/install
 	$(SED) 's/#!.*/#!\/usr\/bin\/python/g' $(1)/usr/bin/gunicorn*
 endef
 
-$(eval $(call BuildPackage,gunicorn))
+$(eval $(call BuildPackage,python-gunicorn))
