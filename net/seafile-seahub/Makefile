@@ -38,7 +38,7 @@ define Package/seafile-seahub
   TITLE:=Seafile server - seahub component
   URL:=https://seafile.com/
   DEPENDS:=+python \
-	+python-flup +gunicorn +openpyxl \
+	+python-flup +python-gunicorn +openpyxl \
 	$(foreach dep,$(SEAFILE_PYTHON_DEPENDS),+python-$(dep))
 endef
 
