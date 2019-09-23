@@ -27,7 +27,7 @@ include ../python3-package.mk
 PKG_UNPACK:=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 
 define Package/python-pyserial/Default
-  SECTION:=lang-python
+  SECTION:=lang
   CATEGORY:=Languages
   SUBMENU:=Python
   URL:=https://github.com/pyserial/pyserial
