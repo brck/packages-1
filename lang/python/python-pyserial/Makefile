@@ -23,7 +23,7 @@ include ../python-package.mk
 include ../python3-package.mk
 
 define Package/python-pyserial/Default
-  SECTION:=lang-python
+  SECTION:=lang
   CATEGORY:=Languages
   SUBMENU:=Python
   URL:=https://github.com/pyserial/pyserial
