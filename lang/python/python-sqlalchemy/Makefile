@@ -48,7 +48,7 @@ define Package/python-sqlalchemy
         TITLE:=python-sqlalchemy
         DEPENDS:= \
                 +python-light \
-                +python-urllib \
+                +python-urllib3 \
                 +python-decimal \
                 +python-logging
         VARIANT:=python
@@ -59,7 +59,7 @@ define Package/python3-sqlalchemy
   	TITLE:=python3-sqlalchemy
   	DEPENDS:= \
 		+python3-light \
-		+python3-urllib \
+		+python3-urllib3 \
 		+python3-decimal \
 		+python3-logging
   	VARIANT:=python3
