@@ -22,8 +22,8 @@ endif
 include $(INCLUDE_DIR)/package.mk
 
 ifeq ($(IS_HEAD),y)
-	include $(TOPDIR)/feeds/packages/lang/python/python-package.mk
-	include $(TOPDIR)/feeds/packages/lang/python/python3-package.mk
+	include ../python-package.mk
+	include ../python3-package.mk
 else
 	$(call include_mk, python-package.mk)
 	$(call include_mk, python3-package.mk)
