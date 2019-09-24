@@ -17,7 +17,6 @@ PKG_HASH:=d4a13d4facc23d8878358994cd355398836a616acc78e285a40d626cecd0817f
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/pySMART-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
-PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)
@@ -65,7 +64,19 @@ define Package/python3-pySMART/description
 	Variant for Python 3.
 endef
 
-$(eval $(call PyPackage,python-pySMART))
+define Build/Compile
+	$(call Build/Compile/PyMod,., \
+		install --prefix="/usr" --root="$(PKG_INSTALL_DIR)" \
+	)
+endef
+
+define Package/python-pySMART/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(CP) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
+		$(1)$(PYTHON_PKG_DIR)/
+endef
+
 $(eval $(call BuildPackage,python-pySMART))
 $(eval $(call Py3Package,python3-pySMART))
 $(eval $(call BuildPackage,python3-pySMART))
