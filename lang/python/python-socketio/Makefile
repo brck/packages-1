@@ -65,7 +65,19 @@ define Package/python3-socketio/description
 	Variant for Python 3.
 endef
 
-$(eval $(call PyPackage,python-socketio))
+define Build/Compile
+	$(call Build/Compile/PyMod,., \
+		install --prefix="/usr" --root="$(PKG_INSTALL_DIR)" \
+	)
+endef
+
+define Package/python-socketio/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(CP) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
+		$(1)$(PYTHON_PKG_DIR)/
+endef
+
 $(eval $(call BuildPackage,python-socketio))
 $(eval $(call Py3Package,python3-socketio))
 $(eval $(call BuildPackage,python3-socketio))

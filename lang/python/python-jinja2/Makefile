@@ -6,10 +6,10 @@ PKG_RELEASE:=2
 
 PKG_SOURCE:=Jinja2-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d
-PKG_SHA256SUM:=065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013
+PKG_HASH:=065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Jinja2-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=python python3
+PKG_BUILD_DEPENDS:=python
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)
@@ -36,7 +36,7 @@ endef
 define Package/python-jinja2
     $(call Package/python-jinja2/Default)
     TITLE:=python-jinja2
-    DEPENDS:=+python-light +python-markupsafe
+    DEPENDS:=+python-markupsafe
     VARIANT:=python
 endef
 
@@ -59,9 +59,20 @@ define Package/python3-jinja2/description
     Variant for Python 3.
 endef
 
-$(eval $(call PyPackage,python-jinja2))
+define Build/Compile
+	$(call Build/Compile/PyMod,., \
+		install --prefix="/usr" --root="$(PKG_INSTALL_DIR)" \
+	)
+endef
+
+define Package/python-jinja2/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(CP) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
+		$(1)$(PYTHON_PKG_DIR)/
+endef
+
 $(eval $(call BuildPackage,python-jinja2))
-$(eval $(call BuildPackage,python-jinja2-src))
 $(eval $(call Py3Package,python3-jinja2))
 $(eval $(call BuildPackage,python3-jinja2))
 $(eval $(call BuildPackage,python3-jinja2-src))
