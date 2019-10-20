@@ -14,7 +14,7 @@ PKG_LICENSE:=ISC
 PKG_LICENSE_FILES:=LICENSE
 
 PYPI_NAME:=requests-oauthlib
-PKG_HASH:=b4261601a71fd721a8bd6d7aa1cc1d6a8a93b4a9f5e96626f8e4d91e8beeaa6a
+PKG_HASH:=bd6533330e8748e94bf0b214775fed487d309b8b8fe823dc45641ebcd9a32f57
 
 include ../pypi.mk
 include $(INCLUDE_DIR)/package.mk

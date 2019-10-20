@@ -12,7 +12,11 @@ PKG_VERSION:=19.1.0
 PKG_RELEASE:=1
 
 PYPI_NAME:=pyOpenSSL
+<<<<<<< HEAD
 PKG_HASH:=9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507
+=======
+PKG_HASH:=aeca66338f6de19d1aa46ed634c3b9ae519a64b458f8468aec688e7e3c20f200
+>>>>>>> 635cb1309... treewide: Use pypi.mk for Python packages
 
 PKG_LICENSE:=Apache-2.0
 PKG_LICENSE_FILES:=LICENSE

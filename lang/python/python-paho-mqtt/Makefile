@@ -20,6 +20,7 @@ ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)
   IS_HEAD:=y
 endif
 
+include ../pypi.mk
 include $(INCLUDE_DIR)/package.mk
 
 ifeq ($(IS_HEAD),y)
