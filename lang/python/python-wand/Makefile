@@ -12,7 +12,7 @@ PKG_VERSION:=0.4.2
 PKG_RELEASE:=1
 PKG_LICENSE:=GPL-2.0
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=Wand-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://pypi.python.org/packages/60/14/5bb6919170f796bcc0b3b42c41a8679394e397468f22e5d89159bcd39197/
 PKG_MD5SUM:=6936a7e5f0a0fe43efce2a249dcd59dc
 
@@ -65,19 +65,7 @@ define Package/python3-wand/description
 	Variant for Python 3.
 endef
 
-define Build/Compile
-	$(call Build/Compile/PyMod,,\
-		install --prefix=/usr --root=$(PKG_INSTALL_DIR) \
-	)
-endef
-
-define Package/python-wand/install
-	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
-	$(CP) \
-		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
-		$(1)$(PYTHON_PKG_DIR)/
-endef
-
+$(eval $(call PyPackage,python-wand))
 $(eval $(call BuildPackage,python-wand))
 $(eval $(call Py3Package,python3-wand))
 $(eval $(call BuildPackage,python3-wand))
