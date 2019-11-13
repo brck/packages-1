@@ -44,7 +44,7 @@ define Package/python-flask
 	$(call Package/python-flask/Default)
 	TITLE:=python-flask
 	VARIANT:=python
-	DEPENDS:=+python-asyncio +python-click +python-codecs +python-decimal \
+	DEPENDS:=+python-click +python-codecs +python-decimal \
            +python-itsdangerous +python-jinja2 +python +python-logging \
            +python-markupsafe +python-multiprocessing +python-setuptools \
            +python-werkzeug
@@ -54,7 +54,7 @@ define Package/python3-flask
 	$(call Package/python-flask/Default)
 	TITLE:=python3-flask
 	VARIANT:=python3
-	DEPENDS:=+python3-asyncio +python3-click +python3-codecs +python3-decimal \
+	DEPENDS:=+PACKAGE_python3-flask:python3-asyncio +python3-click +python3-codecs +python3-decimal \
            +python3-itsdangerous +python3-jinja2 +python3 +python3-logging \
            +python3-markupsafe +python3-multiprocessing +python3-setuptools \
            +python3-werkzeug
