@@ -40,7 +40,6 @@ define Package/python-editor/Default
 	SUBMENU:=Python
 	URL:=https://github.com/fmoo/python-editor
 	MAINTAINER:=BRCK <dev@brck.com>
-	DEPENDS:=+python
 endef
 
 
@@ -48,12 +47,14 @@ define Package/python-editor
 	$(call Package/python-editor/Default)
 	TITLE:=python-editor
 	VARIANT:=python
+	DEPENDS:=+python
 endef
 
 define Package/python3-editor
 	$(call Package/python-editor/Default)
 	TITLE:=python3-editor
 	VARIANT:=python3
+	DEPENDS:=+python3
 endef
 
 define Package/python-editor/description
