@@ -56,7 +56,7 @@ define Package/python3-gevent
 	$(call Package/python-gevent/Default)
 	TITLE:=python3-gevent
 	VARIANT:=python3
-	DEPENDS:+python3 +python3-greenlet
+	DEPENDS:=+python3 +python3-greenlet
 endef
 
 define Package/python-gevent/description
