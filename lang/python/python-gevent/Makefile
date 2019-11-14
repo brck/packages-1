@@ -43,19 +43,20 @@ define Package/python-gevent
 	CATEGORY:=Languages
 	SUBMENU:=Python
 	URL:=http://www.gevent.org/
-	DEPENDS:=+python +python-greenlet
 endef
 
 define Package/python-gevent
 	$(call Package/python-gevent/Default)
 	TITLE:=python-gevent
 	VARIANT:=python
+	DEPENDS:=+python +python-greenlet
 endef
 
 define Package/python3-gevent
 	$(call Package/python-gevent/Default)
 	TITLE:=python3-gevent
 	VARIANT:=python3
+	DEPENDS:+python3 +python3-greenlet
 endef
 
 define Package/python-gevent/description
