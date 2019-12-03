@@ -18,8 +18,6 @@ PKG_SOURCE_VERSION:=$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
 
-PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
-
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)
         IS_HEAD:=y
@@ -85,7 +83,15 @@ define Package/python3-greenlet/description
 	Variant for Python 3.
 endef
 
-$(eval $(call PyPackage,python-greenlet))
+define Build/Compile
+	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
+endef
+
+define Package/python-greenlet/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(CP) \
+	    $(PKG_INSTALL_DIR)/usr/* \
+	    $(1)/usr/
+endef
+
 $(eval $(call BuildPackage,python-greenlet))
-$(eval $(call Py3Package,python3-greenlet))
-$(eval $(call BuildPackage,python3-greenlet))
