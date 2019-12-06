@@ -18,22 +18,42 @@ PKG_SOURCE_URL:=https://codeload.github.com/secdev/scapy/tar.gz/v$(PKG_VERSION)?
 PKG_HASH:=6cacd9ebe2beeb06b10ff57bff3632222755e9d62f1b38e71b02edab6e71d776
 
 include $(INCLUDE_DIR)/package.mk
+include ../../lang/python/python-package.mk
 include ../../lang/python/python3-package.mk
 
+define Package/scapy/Default
+	SECTION:=net
+	CATEGORY:=Network
+	MAINTAINER:=W. Michael Petullo <mike@flyn.org>
+	URL:=https://scapy.net/
+endef
+
 define Package/scapy
-  SECTION:=net
-  CATEGORY:=Network
-  TITLE:=Interactive packet manipulation tool and network scanner
-  MAINTAINER:=W. Michael Petullo <mike@flyn.org>
-  URL:=https://scapy.net/
-  DEPENDS:=+python3
+	$(call Package/scapy/Default)
+	TITLE:=Interactive packet manipulation tool and network scanner
+	DEPENDS:=+python
+	VARIANT:=python
+endef
+
+define Package/scapy3
+	$(call Package/scapy/Default)
+	TITLE:=Interactive packet manipulation tool and network scanner (python3)
+	VARIANT:=python3
+	DEPENDS:=+python3
 endef
 
 define Package/scapy/description
-  Scapy is a powerful interactive packet manipulation program built on top
-  of the Python interpreter. It can be used to forge or decode packets of
-  a wide number of protocols, send them over the wire, capture them, match
-  requests and replies, and much more.
+	Scapy is a powerful interactive packet manipulation program built on top
+	of the Python interpreter. It can be used to forge or decode packets of
+	a wide number of protocols, send them over the wire, capture them, match
+	requests and replies, and much more.
+endef
+
+
+define Package/scapy3/description
+	$(call Package/scapy/description)
+	.
+	(Variant for Python3)
 endef
 
 define Build/Compile
@@ -42,7 +62,22 @@ define Build/Compile
 	)
 endef
 
+define Build/Compile
+	$(call Build/Compile/PyMod,., \
+		install --prefix="/usr" --root="$(PKG_INSTALL_DIR)", \
+	)
+endef
+
 define Package/scapy/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
+		$(1)$(PYTHON_PKG_DIR)/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(1)/usr/bin
+endef
+
+define Package/scapy3/install
 	$(INSTALL_DIR) $(1)$(PYTHON3_PKG_DIR)
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(CP) \
@@ -52,3 +87,4 @@ define Package/scapy/install
 endef
 
 $(eval $(call BuildPackage,scapy))
+$(eval $(call BuildPackage,scapy3))
