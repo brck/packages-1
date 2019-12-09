@@ -60,6 +60,14 @@ define Package/python3-eventlet/description
 	Variant for Python 3
 endef
 
+define PyPackage/python-eventlet/install
+	;
+endef
+
+define PyPackage/python3-eventlet/install
+	;
+endef
+
 $(eval $(call PyPackage,python-eventlet))
 $(eval $(call BuildPackage,python-eventlet))
 $(eval $(call Py3Package,python3-eventlet))
