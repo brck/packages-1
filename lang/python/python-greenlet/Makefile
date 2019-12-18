@@ -46,12 +46,14 @@ define Package/python-greenlet
 	$(call Package/python-greenlet/Default)
 	TITLE:=python-greenlet
 	VARIANT:=python
+        DEPENDS:=+python
 endef
 
 define Package/python3-greenlet
 	$(call Package/python-greenlet/Default)
 	TITLE:=python3-greenlet
 	VARIANT:=python3
+        DEPENDS:=python3
 endef
 
 define Package/python-greenlet/description
