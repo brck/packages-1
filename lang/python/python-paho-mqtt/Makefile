@@ -5,8 +5,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-paho-mqtt
-PKG_VERSION:=v1.4.0
-PKG_RELEASE:=4
+PKG_VERSION:=1.4.0
+PKG_RELEASE:=5
 
 PKG_LICENSE:=Eclipse Public License v1.0 / Eclipse Distribution License v1.0
 PKG_MAINTAINER:=Josef Schlehofer <josef.schlehofer@nic.cz>, Alexandru Ardelean <ardeleanalex@gmail.com>
