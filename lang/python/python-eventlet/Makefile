@@ -42,12 +42,14 @@ endef
 define Package/python-eventlet
 	$(call Package/python-eventlet/Default)
 	TITLE:=python-eventlet
+	DEPENDS:=+python-greenlet
 	VARIANT:=python
 endef
 
 define Package/python3-eventlet
 	$(call Package/python-eventlet/Default)
 	TITLE:=python3-eventlet
+	DEPENDS:=+python-greenlet
 	VARIANT:=python3
 endef
 
