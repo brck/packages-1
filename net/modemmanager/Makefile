@@ -9,10 +9,10 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=modemmanager
 PKG_VERSION:=1.12.4-hcsq
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=ModemManager-$(PKG_VERSION).tar.xz
-PKG_SOURCE_URL:=https://opkg.brck.com/opkg.brck.com
+PKG_SOURCE_URL:=https://opkg.brck.com/archives
 PKG_HASH:=6c1aebd93fc521a5005006bf5c969ed559730fd1aee5483d31df9bdf5a94c912
 PKG_BUILD_DIR:=$(BUILD_DIR)/ModemManager-$(PKG_VERSION)
 
