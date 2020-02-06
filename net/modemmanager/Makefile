@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=modemmanager
-PKG_VERSION:=1.12.4-hcsq
+PKG_VERSION:=1.12.4-hcsq-3
 PKG_RELEASE:=3
 
 PKG_SOURCE:=ModemManager-$(PKG_VERSION).tar.xz
 PKG_SOURCE_URL:=https://opkg.brck.com/archives
-PKG_HASH:=6c1aebd93fc521a5005006bf5c969ed559730fd1aee5483d31df9bdf5a94c912
+PKG_HASH:=caaa43b753adcc6483479d53ae5e7ea206b8b36b2841aa467759c023acf2f330
 PKG_BUILD_DIR:=$(BUILD_DIR)/ModemManager-$(PKG_VERSION)
 
 PKG_MAINTAINER:=Nicholas Smith <nicholas.smith@telcoantennas.com.au>
