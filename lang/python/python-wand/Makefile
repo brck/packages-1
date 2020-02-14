@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-wand
 PKG_VERSION:=0.4.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICENSE:=GPL-2.0
 
 PKG_SOURCE:=Wand-$(PKG_VERSION).tar.gz
@@ -46,7 +46,7 @@ define Package/python-wand
 	$(call Package/python-wand/Default)
 	TITLE:=python-wand
 	VARIANT:=python
-	DEPENDS:=+python
+	DEPENDS:=+python +imagemagick
 endef
 
 define Package/python3-wand
