@@ -8,13 +8,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-wand
-PKG_VERSION:=0.4.2
-PKG_RELEASE:=2
+PKG_VERSION:=0.4.5
+PKG_RELEASE:=3
 PKG_LICENSE:=GPL-2.0
 
 PKG_SOURCE:=Wand-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://pypi.python.org/packages/60/14/5bb6919170f796bcc0b3b42c41a8679394e397468f22e5d89159bcd39197/
-PKG_MD5SUM:=6936a7e5f0a0fe43efce2a249dcd59dc
+PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/24/a1/018ac845f26168ba9a5d6a75259385625a449557965fb8a2f83eb33a1adb/
+PKG_MD5SUM:=94b599e5762dd29c7c77d714f9e8c279
 
 PKG_BUILD_DEPENDS:=python
 PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$(PKG_SOURCE)
@@ -47,6 +47,7 @@ define Package/python-wand
 	TITLE:=python-wand
 	VARIANT:=python
 	DEPENDS:=+python +imagemagick
+	PKG_BUILD_DEPENDS:=+libmagickwand/host
 endef
 
 define Package/python3-wand
