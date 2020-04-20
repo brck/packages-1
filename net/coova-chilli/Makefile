@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coova-chilli
 PKG_VERSION:=1.5
-PKG_RELEASE:=11
+PKG_RELEASE:=14
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://codeload.github.com/coova/coova-chilli/tar.gz/$(PKG_VERSION)?
@@ -43,7 +43,8 @@ define Package/coova-chilli
   SECTION:=net
   CATEGORY:=Network
   DEPENDS:=+kmod-tun +librt +COOVACHILLI_MINIPORTAL:haserl \
-  +COOVACHILLI_WOLFSSL:libwolfssl +COOVACHILLI_OPENSSL:libopenssl
+  +COOVACHILLI_WOLFSSL:libwolfssl +COOVACHILLI_OPENSSL:libopenssl \
+  +libjson-c +libnetfilter-queue +iptables-mod-nfqueue +libmnl +libnfnetlink
   TITLE:=Wireless LAN HotSpot controller (Coova Chilli Version)
   URL:=https://coova.github.io/
   MENU:=1
@@ -122,6 +123,9 @@ define Build/Configure
 	--enable-binstatusfile \
 	--enable-forcedns \
 	--enable-dhcpopt \
+	--enable-json \
+	--enable-libjson \
+	--with-nfqueue \
 	)
 endef
 
@@ -145,6 +149,10 @@ define Package/coova-chilli/preinst
 		cp /etc/init.d/chilli /etc/chilli-backup/chilli.init
 	}
 	exit 0
+endef
+
+define Package/coova-chilli/prerm
+	$(call Package/coova-chilli/preinst)
 endef
 
 define Package/coova-chilli/install
