@@ -5,12 +5,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-flask
-PKG_VERSION:=0.11.1
-PKG_RELEASE:=1
+PKG_VERSION:=1.1.2
+PKG_RELEASE:=2
 
 PKG_SOURCE:=Flask-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://pypi.python.org/packages/55/8a/78e165d30f0c8bb5d57c429a30ee5749825ed461ad6c959688872643ffb3
-PKG_MD5SUM:=d2af95d8fe79cf7da099f062dd122a08
+PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/4e/0b/cb02268c90e67545a0e3a37ea1ca3d45de3aca43ceb7dbf1712fb5127d5d
+PKG_HASH:=4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Flask-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
@@ -61,7 +61,7 @@ define Package/python3-flask
 endef
 
 define Package/python-flask/description
-	A microframework based on Werkzeug, Jinja2 and good intentions. 
+	A microframework based on Werkzeug, Jinja2 and good intentions.
 endef
 
 define Package/python3-flask/description
