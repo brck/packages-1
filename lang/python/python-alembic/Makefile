@@ -13,17 +13,17 @@ PKG_BUILD_DEPENDS:=python
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)
-        IS_HEAD:=y
+  IS_HEAD:=y
 endif
 
 include $(INCLUDE_DIR)/package.mk
 
 ifeq ($(IS_HEAD),y)
-        include ../python-package.mk
-        include ../python3-package.mk
+  include ../python-package.mk
+  include ../python3-package.mk
 else
-        $(call include_mk, python-package.mk)
-        $(call include_mk, python3-package.mk)
+  $(call include_mk, python-package.mk)
+  $(call include_mk, python3-package.mk)
 endif
 
 
@@ -37,13 +37,13 @@ define Package/python-alembic/Default
 endef
 
 define Package/python-alembic
-        $(call Package/python-alembic/Default)
-        TITLE:=python-alembic
-        VARIANT:=python
+  $(call Package/python-alembic/Default)
+  TITLE:=python-alembic
+  VARIANT:=python
 endef
 
 define Package/python-alembic/description
-	Alembic is a database migrations tool written by the author of SQLAlchemy. 
+	Alembic is a database migrations tool written by the author of SQLAlchemy.
 endef
 
 $(eval $(call PyPackage,python-alembic))
