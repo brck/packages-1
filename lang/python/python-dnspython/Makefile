@@ -9,7 +9,7 @@ PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/ec/c5/14bcd63cb6d06092a0
 PKG_HASH:=36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/dnspython-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=python python-setuptools
+PKG_BUILD_DEPENDS:=python
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)

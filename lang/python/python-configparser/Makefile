@@ -9,7 +9,7 @@ PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/16/4f/48975536bd488d3a27
 PKG_HASH:=c7d282687a5308319bf3d2e7706e575c635b0a470342641c93bea0ea3b5331df
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/configparser-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=python python-setuptools
+PKG_BUILD_DEPENDS:=python
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)

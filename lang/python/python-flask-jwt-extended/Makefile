@@ -9,7 +9,7 @@ PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/7a/ee/bb1c679b44ebec5c64
 PKG_HASH:=0aa8ee6fa7eb3be9314e39dd199ac8e19389a95371f9d54e155c7aa635e319dd
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/Flask-JWT-Extended-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=python python-setuptools
+PKG_BUILD_DEPENDS:=python
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)

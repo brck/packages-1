@@ -9,7 +9,7 @@ PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/5f/6e/f71db883f6228e09e7
 PKG_HASH:=ca87a1808333f4ec5a50a5740b44e6cd3879a4b940d559df3996877ec4a2f2a5
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/flask-restx-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=python python-setuptools
+PKG_BUILD_DEPENDS:=python
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)

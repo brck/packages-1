@@ -9,7 +9,7 @@ PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/c5/60/6ac26ad05857c60130
 PKG_HASH:=f6253dfbe0538ad2e387bd8fdfd9293c925d63553f5813c4e587745416501e6d
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/functools32-$(PKG_VERSION)
-PKG_BUILD_DEPENDS:=python python-setuptools
+PKG_BUILD_DEPENDS:=python
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)
