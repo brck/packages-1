@@ -1,41 +1,54 @@
-#
-# Copyright (C) 2019 CZ.NIC, z. s. p. o. (https://www.nic.cz/)
-#
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
-
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-pyrsistent
-PKG_VERSION:=0.15.4
+PKG_VERSION:=0.15.7
 PKG_RELEASE:=1
 
 PYPI_NAME:=pyrsistent
-PKG_HASH:=34b47fa169d6006b32e99d4b3c4031f155e6e68ebcc107d6454852e8e0ee6533
+PKG_HASH:=cdc7b5e3ed77bed61270a47d35434a30617b9becdf2478af76ad2c6ade307280
 
-PKG_MAINTAINER:=Josef Schlehofer <josef.schlehofer@nic.cz>
 PKG_LICENSE:=MIT
-PKG_LICENSE_FILES:=LICENSE.mit
+PKG_LICENSE_FILES:=LICENSE
+PKG_MAINTAINER:=BRCK <dev@brck.com>
 
 include ../pypi.mk
 include $(INCLUDE_DIR)/package.mk
+include ../python-package.mk
 include ../python3-package.mk
 
-define Package/python3-pyrsistent
-  SUBMENU:=Python
+define Package/python-pyrsistent/Default
   SECTION:=lang
   CATEGORY:=Languages
-  TITLE:=Persistent/Functional/Immutable data structures
-  URL:=https://github.com/tobgu/pyrsistent
-  DEPENDS:=+python3-light +python3-six
+  SUBMENU:=Python
+  TITLE:=Python pyrsistent
+	URL:=http://github.com/tobgu/pyrsistent/
+endef
+
+define Package/python-pyrsistent
+$(call Package/python-pyrsistent/Default)
+  DEPENDS:=+PACKAGE_python-pyrsistent:python-light
+  VARIANT:=python
+endef
+
+define Package/python3-pyrsistent
+$(call Package/python-pyrsistent/Default)
+  DEPENDS:=+PACKAGE_python3-pyrsistent:python3-light
   VARIANT:=python3
 endef
 
-define Package/python3-pyrsistent/description
-  Pyrsistent is a number of persistent collections (by some referred to as functional data structures).
-  Persistent in the sense that they are immutable.
+define Package/python-pyrsistent/description
+  Persistent/Functional/Immutable data structures
 endef
+
+define Package/python3-pyrsistent/description
+$(call Package/python-pyrsistent/description)
+.
+(Variant for Python3)
+endef
+
+$(eval $(call PyPackage,python-pyrsistent))
+$(eval $(call BuildPackage,python-pyrsistent))
+$(eval $(call BuildPackage,python-pyrsistent-src))
 
 $(eval $(call Py3Package,python3-pyrsistent))
 $(eval $(call BuildPackage,python3-pyrsistent))
