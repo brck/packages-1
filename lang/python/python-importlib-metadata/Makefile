@@ -5,6 +5,7 @@ PKG_VERSION:=1.7.0
 PKG_RELEASE:=1
 
 PYPI_NAME:=importlib-metadata
+PYPI_SOURCE_NAME:=importlib_metadata
 PKG_HASH:=90bb658cdbbf6d1735b6341ce708fc7024a3e14e99ffdc5783edea9f9b077f83
 
 PKG_LICENSE:=MIT
