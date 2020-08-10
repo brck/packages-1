@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-importlib-resources
 PKG_VERSION:=3.0.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PYPI_NAME:=importlib-resources
 PYPI_SOURCE_NAME:=importlib_resources

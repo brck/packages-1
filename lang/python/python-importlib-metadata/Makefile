@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-importlib-metadata
 PKG_VERSION:=1.7.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PYPI_NAME:=importlib-metadata
 PYPI_SOURCE_NAME:=importlib_metadata

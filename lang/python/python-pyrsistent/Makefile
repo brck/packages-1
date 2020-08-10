@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-pyrsistent
 PKG_VERSION:=0.15.7
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PYPI_NAME:=pyrsistent
 PKG_HASH:=cdc7b5e3ed77bed61270a47d35434a30617b9becdf2478af76ad2c6ade307280
