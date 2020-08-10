@@ -6,7 +6,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=itsdangerous
 PKG_VERSION:=1.1.0
-PKG_RELEASE:=4
+PKG_RELEASE:=5
 
 PYPI_NAME:=$(PKG_NAME)
 PKG_HASH:=321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19
@@ -20,7 +20,7 @@ include $(INCLUDE_DIR)/package.mk
 include ../python-package.mk
 include ../python3-package.mk
 
-define Package/python3-itsdangerous/Default
+define Package/python-itsdangerous/Default
   SECTION:=lang
   CATEGORY:=Languages
   SUBMENU:=Python
