@@ -6,14 +6,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=itsdangerous
 PKG_VERSION:=1.1.0
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PYPI_NAME:=$(PKG_NAME)
 PKG_HASH:=321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19
 
-PKG_MAINTAINER:=BRCK <dev@brck.com>
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENSE
+PKG_MAINTAINER:=BRCK <dev@brck.com>
 
 include ../pypi.mk
 include $(INCLUDE_DIR)/package.mk
@@ -30,15 +30,13 @@ endef
 
 define Package/python-itsdangerous
 $(call Package/python-itsdangerous/Default)
-  DEPENDS:=+PACKAGE_python-itsdangerous:python-light \
-  +PACKAGE_python-itsdangerous:python-dateutil
+  DEPENDS:=+PACKAGE_python-itsdangerous:python-light
   VARIANT:=python
 endef
 
 define Package/python3-itsdangerous
 $(call Package/python-itsdangerous/Default)
-  DEPENDS:=+PACKAGE_python3-itsdangerous:python3-light \
-  +PACKAGE_python-itsdangerous:python-dateutil
+  DEPENDS:=+PACKAGE_python3-itsdangerous:python3-light
   VARIANT:=python3
 endef
 
