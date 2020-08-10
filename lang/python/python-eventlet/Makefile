@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-eventlet
 PKG_VERSION:=0.26.1
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PYPI_NAME:=eventlet
 PKG_HASH:=4f4a43366b4cbd4a3f2f231816e5c3dae8ab316df9b7da11f0525e2800559f33
@@ -26,7 +26,7 @@ endef
 
 define Package/python-eventlet
 $(call Package/python-eventlet/Default)
-	DEPENDS:=+python-light +python-greenlet +python-monotonic +python-enum34 \
+	DEPENDS:=+python-light +python-greenlet +python-monotonic \
 		+python-six +python-dnspython
   VARIANT:=python
 endef
