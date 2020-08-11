@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-greenlet
 PKG_VERSION:=0.4.2
-PKG_RELEASE:=6
+PKG_RELEASE:=7
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/python-greenlet/greenlet.git
@@ -48,6 +48,17 @@ define Package/python3-greenlet/description
 $(call Package/python-greenlet/description)
 .
 (Variant for Python3)
+endef
+
+define Build/Compile
+	$(call Build/Compile/PyMod,,install --prefix="$(PKG_INSTALL_DIR)/usr")
+endef
+
+define Package/python-greenlet/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(CP) \
+	    $(PKG_INSTALL_DIR)/usr/* \
+	    $(1)/usr/
 endef
 
 $(eval $(call PyPackage,python-greenlet))
