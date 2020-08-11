@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-eventlet
 PKG_VERSION:=0.26.1
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 PYPI_NAME:=eventlet
 PKG_HASH:=4f4a43366b4cbd4a3f2f231816e5c3dae8ab316df9b7da11f0525e2800559f33
@@ -46,6 +46,23 @@ define Package/python3-eventlet/description
 $(call Package/python-eventlet/description)
 .
 (Variant for Python3)
+endef
+
+define Build/Compile
+	$(call Build/Compile/PyMod,., \
+		install --prefix="/usr" --root="$(PKG_INSTALL_DIR)" \
+	)
+endef
+
+define Package/python-eventlet/install
+	$(INSTALL_DIR) $(1)$(PYTHON_PKG_DIR)
+	$(CP) \
+		$(PKG_INSTALL_DIR)$(PYTHON_PKG_DIR)/* \
+		$(1)$(PYTHON_PKG_DIR)/
+endef
+
+define PyPackage/python3-eventlet/install
+	:
 endef
 
 $(eval $(call PyPackage,python-eventlet))
