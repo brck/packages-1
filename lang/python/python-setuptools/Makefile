@@ -2,10 +2,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-setuptools
 PKG_VERSION:=44.1.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
-PYPI_NAME:=setuptools
+PKG_SOURCE:=setuptools-$(PKG_VERSION).zip
+PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/b2/40/4e00501c204b457f10fe410da0c97537214b2265247bc9a5bc6edd55b9e4
 PKG_HASH:=c67aa55db532a0dadc4d2e20ba9961cbd3ccc84d544e9029699822542b5a476b
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/setuptools-$(PKG_VERSION)
+PKG_BUILD_DEPENDS:=python
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
