@@ -1,12 +1,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-greenlet
-PKG_VERSION:=0.4.7
-PKG_RELEASE:=4
+PKG_VERSION:=0.4.2
+PKG_RELEASE:=5
 
 PKG_SOURCE:=greenlet-$(PKG_VERSION).zip
-PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/7a/9f/a1a0d9bdf3203ae1502c5a8434fe89d323599d78a106985bc327351a69d4
-PKG_HASH:=f32c4fa4e06443e1bdb0d32b69e7617c25ff772c3ffc6d0aa63d192e9fd795fe
+PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/11/46/ce7c6f01fba12f86924f4e5b7730652322c8e6069d69f479ade516785c4f
+PKG_HASH:=b160e556a22e16bae3f3f63ffce7898682c803cd896457192f7b54fe74fe991e
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/greenlet-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
