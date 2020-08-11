@@ -2,12 +2,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-greenlet
 PKG_VERSION:=0.4.2
-PKG_RELEASE:=5
+PKG_RELEASE:=6
 
-PKG_SOURCE:=greenlet-$(PKG_VERSION).zip
-PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/11/46/ce7c6f01fba12f86924f4e5b7730652322c8e6069d69f479ade516785c4f
-PKG_HASH:=b160e556a22e16bae3f3f63ffce7898682c803cd896457192f7b54fe74fe991e
-
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=https://github.com/python-greenlet/greenlet.git
+PKG_SOURCE_VERSION:=4300791bbc9b4976fc54ded1d234849693bae462
+PKG_SOURCE:=greenlet-$(PKG_VERSION).tar.gz
+PKG_SOURCE_SUBDIR:=greenlet-$(PKG_VERSION)
 PKG_BUILD_DIR:=$(BUILD_DIR)/greenlet-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
 
@@ -15,7 +16,6 @@ PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
 PKG_MAINTAINER:=BRCK <dev@brck.com>
 
-include ../pypi.mk
 include $(INCLUDE_DIR)/package.mk
 include ../python-package.mk
 include ../python3-package.mk
@@ -30,13 +30,13 @@ endef
 
 define Package/python-greenlet
 $(call Package/python-greenlet/Default)
-  DEPENDS:=+PACKAGE_python-greenlet:python-light
+  DEPENDS:=+PACKAGE_python-greenlet:python
   VARIANT:=python
 endef
 
 define Package/python3-greenlet
 $(call Package/python-greenlet/Default)
-  DEPENDS:=+PACKAGE_python3-greenlet:python3-light
+  DEPENDS:=+PACKAGE_python3-greenlet:python3
   VARIANT:=python3
 endef
 
