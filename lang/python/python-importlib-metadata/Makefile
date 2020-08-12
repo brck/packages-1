@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-importlib-metadata
 PKG_VERSION:=1.7.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PYPI_NAME:=importlib-metadata
 PYPI_SOURCE_NAME:=importlib_metadata
@@ -27,15 +27,13 @@ endef
 
 define Package/python-importlib-metadata
 $(call Package/python-importlib-metadata/Default)
-  DEPENDS:=+PACKAGE_python-importlib-metadata:python-light \
-  +PACKAGE_python-importlib-metadata:python-zipp
+  DEPENDS:=+python-light +python-zipp
   VARIANT:=python
 endef
 
 define Package/python3-importlib-metadata
 $(call Package/python-importlib-metadata/Default)
-  DEPENDS:=+PACKAGE_python3-importlib-metadata:python3-light \
-  +PACKAGE_python-importlib-metadata:python-zipp
+  DEPENDS:=+python3-light +python3-zipp
   VARIANT:=python3
 endef
 

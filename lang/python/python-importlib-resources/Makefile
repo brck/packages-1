@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-importlib-resources
 PKG_VERSION:=3.0.0
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PYPI_NAME:=importlib-resources
 PYPI_SOURCE_NAME:=importlib_resources
@@ -27,17 +27,13 @@ endef
 
 define Package/python-importlib-resources
 $(call Package/python-importlib-resources/Default)
-  DEPENDS:=+PACKAGE_python-importlib-resources:python-light \
-  +PACKAGE_python-importlib-resources:python-singledispatch \
-  +PACKAGE_python-importlib-resources:python-six
+  DEPENDS:=+python-light +python-singledispatch +python-six
   VARIANT:=python
 endef
 
 define Package/python3-importlib-resources
 $(call Package/python-importlib-resources/Default)
-  DEPENDS:=+PACKAGE_python3-importlib-resources:python3-light \
-  +PACKAGE_python-importlib-resources:python-singledispatch \
-  +PACKAGE_python-importlib-resources:python-six
+  DEPENDS:=+python3-light +python3-singledispatch +python3-six
   VARIANT:=python3
 endef
 

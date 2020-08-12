@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-netaddr
 PKG_VERSION:=0.8.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PYPI_NAME:=netaddr
 PKG_HASH:=d6cc57c7a07b1d9d2e917aa8b36ae8ce61c35ba3fcd1b83ca31c5a0ee2b5a243
@@ -26,29 +26,17 @@ endef
 
 define Package/python-netaddr
 $(call Package/python-netaddr/Default)
-  DEPENDS:=+PACKAGE_python-netaddr:python-light \
-  +PACKAGE_python-netaddr:python-contextlib2 \
-  +PACKAGE_python-netaddr:python-pathlib2 \
-  +PACKAGE_python-netaddr:python-scandir \
-  +PACKAGE_python-netaddr:python-zipp \
-  +PACKAGE_python-netaddr:python-singledispatch \
-  +PACKAGE_python-netaddr:python-typing \
-  +PACKAGE_python-netaddr:python-six \
-  +PACKAGE_python-netaddr:python-importlib-resources
+  DEPENDS:=+python-light +python-contextlib2 +python-pathlib2 +python-scandir \
+    +python-zipp +python-singledispatch +python-typing +python-six \
+    +python-importlib-resources
   VARIANT:=python
 endef
 
 define Package/python3-netaddr
 $(call Package/python-netaddr/Default)
-  DEPENDS:=+PACKAGE_python3-netaddr:python3-light \
-  +PACKAGE_python-netaddr:python-contextlib2 \
-  +PACKAGE_python-netaddr:python-pathlib2 \
-  +PACKAGE_python-netaddr:python-scandir \
-  +PACKAGE_python-netaddr:python-zipp \
-  +PACKAGE_python-netaddr:python-singledispatch \
-  +PACKAGE_python-netaddr:python-typing \
-  +PACKAGE_python-netaddr:python-six \
-  +PACKAGE_python-netaddr:python-importlib-resources
+  DEPENDS:=+python3-light +python3-contextlib2 +python3-pathlib2 +python3-scandir \
+    +python3-zipp +python3-singledispatch +python3-typing +python3-six \
+    +python3-importlib-resources
   VARIANT:=python3
 endef
 
