@@ -21,17 +21,17 @@ PKG_UNPACK=$(HOST_TAR) -C $(PKG_BUILD_DIR) --strip-components=1 -xzf $(DL_DIR)/$
 
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)
-        IS_HEAD:=y
+	IS_HEAD:=y
 endif
 
 include $(INCLUDE_DIR)/package.mk
 
 ifeq ($(IS_HEAD),y)
-        include ../python-package.mk
-        include ../python3-package.mk
+	include ../python-package.mk
+	include ../python3-package.mk
 else
-        $(call include_mk, python-package.mk)
-        $(call include_mk, python3-package.mk)
+	$(call include_mk, python-package.mk)
+	$(call include_mk, python3-package.mk)
 endif
 
 define Package/python-typing/Default
@@ -60,11 +60,13 @@ define Package/python-typing/description
 endef
 
 define Package/python3-typing/description
-	$(call Package/python-typing/description)
-	Variant for Python 3.
+$(call Package/python-typing/description)
+.
+(Variant for Python3)
 endef
 
 $(eval $(call PyPackage,python-typing))
 $(eval $(call BuildPackage,python-typing))
+
 $(eval $(call Py3Package,python3-typing))
 $(eval $(call BuildPackage,python3-typing))
