@@ -7,12 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-typing
-PKG_VERSION:=3.7.4
-PKG_RELEASE:=1
+PKG_VERSION:=3.7.4.3
+PKG_RELEASE:=2
 
 PKG_SOURCE:=typing-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/60/e8/944bd083411be12c6d46d400a06744a5a85ad27d3c6e487a5da0d58950cc
-PKG_HASH:=53765ec4f83a2b720214727e319607879fec4acde22c4fbb54fa2604e79e44ce
+PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/05/d9/6eebe19d46bd05360c9a9aae822e67a80f9242aabbfc58b641b957546607
+PKG_HASH:=1187fb9c82fd670d10aa07bbb6cfcfe4bdda42d6fab8d5134f04e8c4d0b71cc9
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/typing-$(PKG_VERSION)
 PKG_BUILD_DEPENDS:=python
@@ -38,20 +38,21 @@ define Package/python-typing/Default
 	SECTION:=lang
 	CATEGORY:=Languages
 	SUBMENU:=Python
+	TITLE:=Python typing
 	URL:=https://docs.python.org/3/library/typing.html
 	MAINTAINER:=BRCK <dev@brck.com>
 endef
 
 
 define Package/python-typing
-	$(call Package/python-typing/Default)
-	TITLE:=python-typing
+$(call Package/python-typing/Default)
+	DEPENDS:=+python-light
 	VARIANT:=python
 endef
 
 define Package/python3-typing
-	$(call Package/python-typing/Default)
-	TITLE:=python3-typing
+$(call Package/python-typing/Default)
+	DEPENDS:=+python3-light
 	VARIANT:=python3
 endef
 
@@ -67,6 +68,8 @@ endef
 
 $(eval $(call PyPackage,python-typing))
 $(eval $(call BuildPackage,python-typing))
+$(eval $(call BuildPackage,python-typing-src))
 
 $(eval $(call Py3Package,python3-typing))
 $(eval $(call BuildPackage,python3-typing))
+$(eval $(call BuildPackage,python3-typing-src))
