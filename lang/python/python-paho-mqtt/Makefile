@@ -6,7 +6,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-paho-mqtt
 PKG_VERSION:=1.5.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_MAINTAINER:=Josef Schlehofer <josef.schlehofer@nic.cz>, Alexandru Ardelean <ardeleanalex@gmail.com>
 PKG_LICENSE:=EPL-1.0 Eclipse Distribution License v1.0
@@ -48,12 +48,12 @@ endef
 define Package/python3-paho-mqtt
     $(call Package/python-paho-mqtt/Default)
     TITLE:=python3-paho-mqtt
-    DEPENDS:=+python
+    DEPENDS:=+python3-light
     VARIANT:=python3
 endef
 
 define Package/python-paho-mqtt/description
-    MQTT version 3.1/3.1.1 client class for Python 3
+    MQTT version 3.1/3.1.1 client class for Python 2
 endef
 
 define Package/python3-paho-mqtt/description

@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-psutil
 PKG_VERSION:=5.2.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/giampaolo/psutil.git
@@ -55,7 +55,7 @@ define Package/python3-psutil
 	$(call Package/python-psutil/Default)
 	TITLE:=python3-psutil
 	VARIANT:=python3
-	DEPENDS:=+python3
+	DEPENDS:=+python3-light
 endef
 
 define Package/python-psutil/description
