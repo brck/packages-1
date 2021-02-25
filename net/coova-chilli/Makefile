@@ -8,22 +8,23 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coova-chilli
-PKG_VERSION:=1.4
-PKG_RELEASE:=10
-
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://codeload.github.com/coova/coova-chilli/tar.gz/$(PKG_VERSION)?
-PKG_HASH:=987647a4c8efe7b1e2d7108d56068e3bd7830d326680f0eaa2c705e4c59c46d9
-
+PKG_VERSION:=1.4.5-xwf
 PKG_MAINTAINER:=Jaehoon You <teslamint@gmail.com>
-PKG_LICENSE:=GPL-2.0-or-later
+PKG_LICENSE:=GPL-2.0+
 PKG_LICENSE_FILES:=COPYING
+PKG_RELEASE:=17
 
-PKG_FIXUP:=autoreconf
+
+PKG_SOURCE_PROTO:=git
+PKG_SOURCE_URL:=git@github.com:brck/xwf_coova.git
+PKG_SOURCE_VERSION:=cfbbef5e4b547a00543bad978d97c8fa31ec3bee
+PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
+
+
 PKG_INSTALL:=1
-PKG_BUILD_PARALLEL:=0
 
-PKG_CONFIG_DEPENDS:= \
+PKG_CONFIG_DEPENDS := \
   COOVACHILLI_MINIPORTAL \
   COOVACHILLI_REDIR \
   COOVACHILLI_USERAGENT \
@@ -31,7 +32,7 @@ PKG_CONFIG_DEPENDS:= \
   COOVACHILLI_UAMDOMAINFILE \
   COOVACHILLI_LARGELIMITS \
   COOVACHILLI_NOSSL \
-  COOVACHILLI_WOLFSSL \
+  COOVACHILLI_CYASSL \
   COOVACHILLI_OPENSSL
 
 include $(INCLUDE_DIR)/package.mk
@@ -41,7 +42,7 @@ define Package/coova-chilli
   SUBMENU:=Captive Portals
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+kmod-tun +librt +COOVACHILLI_WOLFSSL:libwolfssl +COOVACHILLI_OPENSSL:libopenssl
+  DEPENDS:=+kmod-tun +librt +COOVACHILLI_CYASSL:libcyassl +COOVACHILLI_OPENSSL:libopenssl
   TITLE:=Wireless LAN HotSpot controller (Coova Chilli Version)
   URL:=https://coova.github.io/
   MENU:=1
@@ -78,7 +79,7 @@ endef
 
 DISABLE_NLS=
 
-TARGET_CFLAGS += $(FPIC) -Wno-address-of-packed-member
+TARGET_CFLAGS += $(FPIC)
 
 CONFIGURE_VARS += \
        ARCH="$(LINUX_KARCH)" \
@@ -109,17 +110,49 @@ define Build/Configure
 	$(if $(CONFIG_COOVACHILLI_DNSLOG),--enable,--disable)-dnslog \
 	$(if $(CONFIG_COOVACHILLI_MINIPORTAL),--enable,--disable)-miniportal \
 	$(if $(CONFIG_COOVACHILLI_USERAGENT),--enable,--disable)-useragent \
-	$(if $(CONFIG_COOVACHILLI_LARGELIMITS),--enable,--disable)-largelimits \
-	$(if $(CONFIG_COOVACHILLI_UAMDOMAINFILE),--enable,--disable)-uamdomainfile \
 	$(if $(CONFIG_IPV6),--with,--without)-ipv6 \
-	$(if $(CONFIG_COOVACHILLI_WOLFSSL),--with,--without)-cyassl \
+	$(if $(CONFIG_COOVACHILLI_CYASSL),--with,--without)-cyassl \
 	$(if $(CONFIG_COOVACHILLI_OPENSSL),--with,--without)-openssl \
 	$(if $(CONFIG_PACKAGE_kmod-ipt-coova),--with-nfcoova) \
+	--enable-largelimits \
+	--enable-layer3 \
+	--enable-multiroute \
+	--with-poll \
+	--enable-shared \
+	--enable-gardenext \
+	--enable-chillixml \
+	--enable-eapol \
+	--enable-extadmvsa \
+	--enable-uamdomainfile \
+	--enable-chilliscript \
+	--disable-static \
+	--disable-dhcpradius \
+	--enable-authedallowed \
+	--enable-gardenaccounting \
+	--enable-dhcpopt \
 	)
 endef
 
 define Package/coova-chilli/conffiles
 /etc/config/chilli
+endef
+
+
+define Package/coova-chilli/preinst
+	#!/bin/sh
+	[ -n "$$IPKG_INSTROOT" ] && exit 0
+	[ -x /etc/init.d/chilli-monitor ] && /etc/init.d/chilli-monitor stop 2>/dev/null
+	[ -x /etc/init.d/chilli ] && /etc/init.d/chilli stop 2>/dev/null
+	# Backup
+	[ -f /etc/init.d/chilli-monitor ] && {
+		mkdir /etc/chilli-backup
+		cp /etc/chilli/defaults /etc/chilli-backup/default
+		cp /etc/chilli/up.sh /etc/chilli-backup/up.sh
+		cp /etc/config/chilli /etc/chilli-backup/chilli.config
+		cp /etc/hotplug.d/iface/30-chilli /etc/chilli-backup/30-chilli
+		cp /etc/init.d/chilli /etc/chilli-backup/chilli.init
+	}
+	exit 0
 endef
 
 define Package/coova-chilli/install
@@ -142,6 +175,27 @@ define Package/coova-chilli/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DATA) files/chilli.config $(1)/etc/config/chilli
 	$(INSTALL_DIR) $(1)/lib/firewall
+	$(CP) files/chilli.firewall $(1)/lib/firewall/chilli.sh
+endef
+
+
+define Package/coova-chilli/postinst
+	#!/bin/sh
+	[ -n "$$IPKG_INSTROOT" ] && exit 0
+	# Restore
+	[ -d /etc/chilli-backup ] && {
+		cp /etc/chilli-backup/default /etc/chilli/defaults
+		cp /etc/chilli-backup/up.sh /etc/chilli/up.sh
+		cp /etc/chilli-backup/chilli.config /etc/config/chilli
+		cp /etc/chilli-backup/30-chilli /etc/hotplug.d/iface/30-chilli
+		cp /etc/chilli-backup/chilli.init /etc/init.d/chilli
+		rm -rf /etc/chilli-backup
+	}
+	/etc/init.d/chilli restart 2>/dev/null
+	[ -x /etc/init.d/chilli-monitor ] && {
+		/etc/init.d/chilli-monitor restart 2>/dev/null
+	}
+	exit 0
 endef
 
 $(eval $(call BuildPackage,coova-chilli))
