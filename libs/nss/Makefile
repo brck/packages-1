@@ -7,18 +7,21 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nss
-PKG_VERSION:=3.44
+PKG_VERSION:=3.55
 PKG_RELEASE:=1
-PKG_MAINTAINER:=Lucian Cristian <lucian.cristian@gmail.com>
-PKG_LICENCE:=MPL-2.0
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:= \
     https://download.cdn.mozilla.net/pub/security/$(PKG_NAME)/releases/NSS_$(subst .,_,$(PKG_VERSION))_RTM/src \
     https://archive.mozilla.org/pub/security/$(PKG_NAME)/releases/NSS_$(subst .,_,$(PKG_VERSION))_RTM/src
-PKG_HASH:=a5620e59b6eeedfd5a12c9298b50ad92e9898b223e214eb675e36f4ffb5b6aff
+PKG_HASH:=fc692e3db45a082ee6328cd989e795c171a00df9c518df090937f7604f850004
 
-PKG_BUILD_PARALLEL:=0
+PKG_MAINTAINER:=Lucian Cristian <lucian.cristian@gmail.com>
+PKG_LICENCE:=MPL-2.0
+PKG_LICENSE_FILES:=nss/COPYING
+PKG_CPE_ID:=cpe:/a:mozilla:network_security_services
+
+PKG_BUILD_PARALLEL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -40,7 +43,7 @@ define Package/nss-utils
 endef
 
 define Package/libnss/description
-  Network Security Services (NSS) is a set of libraries designed to support 
+  Network Security Services (NSS) is a set of libraries designed to support
   cross-platform development of security-enabled client and server applications.
   Applications built with NSS can support SSL v2 and v3, TLS, PKCS 5, PKCS 7,
   PKCS 11, PKCS 12, S/MIME, X.509 v3 certificates, and other security standards.
@@ -55,39 +58,48 @@ ifeq ($(LBITS),64)
     export USE_64=1
 endif
 
-TARGET_LDFLAGS += -Wl,--gc-sections,--as-needed
+ifeq ($(CONFIG_CPU_TYPE),"xscale")
+TARGET_CFLAGS+= -mfloat-abi=softfp
+endif
 
-export CROSS_COMPILE=1
-export BUILD_OPT=1
+ifneq ($(findstring arm,$(CONFIG_ARCH)),)
+ifeq ($(findstring neon,$(CONFIG_CPU_TYPE)),)
+export NSS_DISABLE_ARM32_NEON
+endif
+endif
+
 export NATIVE_CC=$(HOSTCC)
 export NATIVE_FLAGS=$(HOST_CFLAGS)
-export NSDISTMODE=copy
 export NSS_ENABLE_WERROR=0
-export NSS_DISABLE_GTESTS=1
-export NSS_USE_SYSTEM_SQLITE=1
-export OS_TARGET=Linux
-export OS_ARCH=Linux
-export OS_TEST=$(ARCH)
-export CPU_ARCH=$(ARCH)
-export fpic=$(FPIC)
-export NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr
-export SEED_ONLY_DEV_URANDOM=1
-export OS_REL_CFLAGS=$(TARGET_CFLAGS)
-export NS_USE_GCC=1
-export FREEBL_NO_DEPEND=1
-#size optimisation, seems to not impact speed
-export NSS_DISABLE_DBM=1
-export NSS_PKIX_NO_LDAP=1
-export ALLOW_OPT_CODE_SIZE=1
-export OPT_CODE_SIZE=1
+
+MAKE_FLAGS += \
+	CROSS_COMPILE=1 \
+	BUILD_OPT=1 \
+	NSDISTMODE=copy \
+	NSS_DISABLE_GTESTS=1 \
+	NSS_USE_SYSTEM_SQLITE=1 \
+	OS_ARCH=Linux \
+	OS_TEST=$(ARCH) \
+	fpic=$(FPIC) \
+	NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
+	SEED_ONLY_DEV_URANDOM=1 \
+	NS_USE_GCC=1 \
+	FREEBL_NO_DEPEND=1 \
+	NSS_PKIX_NO_LDAP=1 \
+	ALLOW_OPT_CODE_SIZE=1 \
+	OPT_CODE_SIZE=1 \
+	OS_REL_CFLAGS="$(TARGET_CFLAGS)"
 
 #native compile nsinstall
 define Build/Prepare
 	$(call Build/Prepare/Default)
-	USE_NATIVE=1 OS_REL_CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" CC="$(HOSTCC)" \
+	USE_NATIVE=1 OS_REL_CFLAGS="$(HOST_CFLAGS)" LDFLAGS="$(HOST_LDFLAGS)" \
+	CC="$(HOSTCC)" CPU_ARCH="$(HOST_ARCH)" \
 	    $(MAKE) -C $(PKG_BUILD_DIR)/nss/coreconf/nsinstall
-#	$(if $(CONFIG_LIBC_USE_GLIBC),, \
-#		$(SED) '/-DHAVE_SYS_CDEFS_H/d' $(PKG_BUILD_DIR)/nss/lib/dbm/config/config.mk)
+endef
+
+define Build/Compile
+	$(call Build/Compile/Default,nss_build_all)
 endef
 
 define Package/libnss/conffiles
@@ -125,11 +137,12 @@ define Package/libnss/install
 
 	$(CP) $(PKG_BUILD_DIR)/dist/build_dir/lib/libfreebl3.so $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/dist/build_dir/lib/libnss3.so $(1)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/dist/build_dir/lib/libnssckbi.so $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/dist/build_dir/lib/libnssutil3.so $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/dist/build_dir/lib/libsmime3.so $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/dist/build_dir/lib/libsoftokn3.so $(1)/usr/lib/
 	$(CP) $(PKG_BUILD_DIR)/dist/build_dir/lib/libssl3.so $(1)/usr/lib/
-#	Pprovide databases with a blank certificate
+#	Provide databases with a blank certificate
 	$(CP)	./files/blank-cert9.db $(1)/etc/pki/nssdb/cert9.db
 	$(CP)	./files/blank-key4.db $(1)/etc/pki/nssdb/key4.db
 	$(CP)	./files/system-pkcs11.txt $(1)/etc/pki/nssdb/pkcs11.txt

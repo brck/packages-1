@@ -5,22 +5,32 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-paho-mqtt
+<<<<<<< HEAD
 PKG_VERSION:=1.4.0
 PKG_RELEASE:=5
 
 PKG_LICENSE:=Eclipse Public License v1.0 / Eclipse Distribution License v1.0
+=======
+PKG_VERSION:=1.5.0
+PKG_RELEASE:=1
+
+>>>>>>> 4ed9be19875e83e38a003dae29ae58070884eff8
 PKG_MAINTAINER:=Josef Schlehofer <josef.schlehofer@nic.cz>, Alexandru Ardelean <ardeleanalex@gmail.com>
+PKG_LICENSE:=EPL-1.0 Eclipse Distribution License v1.0
+PKG_LICENSE_FILES:=epl-v10 edl-v10
 
-PKG_SOURCE:=paho-mqtt-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/25/63/db25e62979c2a716a74950c9ed658dce431b5cb01fde29eb6cba9489a904
-PKG_HASH:=e440a052b46d222e184be3be38676378722072fcd4dfd2c8f509fb861a7b0b79
-PKG_BUILD_DIR:=$(BUILD_DIR)/paho-mqtt-$(PKG_VERSION)
+PYPI_NAME:=paho-mqtt
+PKG_HASH:=e3d286198baaea195c8b3bc221941d25a3ab0e1507fc1779bdb7473806394be4
 
+<<<<<<< HEAD
 OW_VER:=$(shell git --git-dir=$(TOPDIR)/.git describe --abbrev=0 --always --tag)
 ifneq ($(filter reboot v19.07% v18.06%, $(OW_VER)),)
   IS_HEAD:=y
 endif
 
+=======
+include ../pypi.mk
+>>>>>>> 4ed9be19875e83e38a003dae29ae58070884eff8
 include $(INCLUDE_DIR)/package.mk
 
 ifeq ($(IS_HEAD),y)

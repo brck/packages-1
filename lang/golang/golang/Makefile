@@ -18,11 +18,12 @@ GO_SOURCE_URLS:=https://dl.google.com/go/ \
 
 PKG_SOURCE:=go$(PKG_VERSION).src.tar.gz
 PKG_SOURCE_URL:=$(GO_SOURCE_URLS)
-PKG_HASH:=95dbeab442ee2746b9acf0934c8e2fc26414a0565c008631b04addb8c02e7624
+PKG_HASH:=5fb43171046cf8784325e67913d55f88a683435071eef8e9da1aa8a1588fcf5d
 
+PKG_MAINTAINER:=Jeffery To <jeffery.to@gmail.com>
 PKG_LICENSE:=BSD-3-Clause
 PKG_LICENSE_FILES:=LICENSE
-PKG_MAINTAINER:=Jeffery To <jeffery.to@gmail.com>
+PKG_CPE_ID:=cpe:/a:golang:go
 
 PKG_BUILD_DEPENDS:=golang/host
 PKG_BUILD_DIR:=$(BUILD_DIR)/go-$(PKG_VERSION)
@@ -32,10 +33,12 @@ PKG_USE_MIPS16:=0
 PKG_GO_WORK_DIR:=$(PKG_BUILD_DIR)/.go_work
 PKG_GO_HOST_CACHE_DIR:=$(PKG_GO_WORK_DIR)/host_cache
 PKG_GO_TARGET_CACHE_DIR:=$(PKG_GO_WORK_DIR)/target_cache
-PKG_GO_TMP_DIR:=$(PKG_GO_WORK_DIR)/tmp
 
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/go-$(PKG_VERSION)
 HOST_BUILD_PARALLEL:=1
+
+HOST_GO_WORK_DIR:=$(HOST_BUILD_DIR)/.go_work
+HOST_GO_CACHE_DIR:=$(HOST_GO_WORK_DIR)/cache
 
 HOST_GO_PREFIX:=$(STAGING_DIR_HOSTPKG)
 HOST_GO_VERSION_ID:=cross
@@ -60,6 +63,8 @@ BOOTSTRAP_SOURCE_URL:=$(GO_SOURCE_URLS)
 BOOTSTRAP_HASH:=f4ff5b5eb3a3cae1c993723f3eab519c5bae18866b5e5f96fe1102f0cb5c3e52
 
 BOOTSTRAP_BUILD_DIR:=$(HOST_BUILD_DIR)/.go_bootstrap
+BOOTSTRAP_WORK_DIR:=$(BOOTSTRAP_BUILD_DIR)/.go_work
+BOOTSTRAP_CACHE_DIR:=$(BOOTSTRAP_WORK_DIR)/cache
 
 BOOTSTRAP_GO_VALID_OS_ARCH:= \
   darwin_386     darwin_amd64 \
@@ -143,6 +148,13 @@ This package provides the Go programming language source files needed
 for cross-compilation.
 endef
 
+PKG_GO_ZBOOTSTRAP_MODS:= \
+	s/defaultGO386 = `[^`]*`/defaultGO386 = `$(if $(GO_386),$(GO_386),387)`/; \
+	s/defaultGOARM = `[^`]*`/defaultGOARM = `$(if $(GO_ARM),$(GO_ARM),5)`/; \
+	s/defaultGOMIPS = `[^`]*`/defaultGOMIPS = `$(if $(GO_MIPS),$(GO_MIPS),hardfloat)`/; \
+	s/defaultGOMIPS64 = `[^`]*`/defaultGOMIPS64 = `$(if $(GO_MIPS64),$(GO_MIPS64),hardfloat)`/; \
+	s/defaultGOPPC64 = `[^`]*`/defaultGOPPC64 = `power8`/;
+
 define Download/golang-bootstrap
   FILE:=$(BOOTSTRAP_SOURCE)
   URL:=$(BOOTSTRAP_SOURCE_URL)
@@ -164,13 +176,19 @@ define Host/Compile
 	$(call GoCompiler/Bootstrap/CheckHost,$(BOOTSTRAP_GO_VALID_OS_ARCH))
 	$(call GoCompiler/Host/CheckHost,$(HOST_GO_VALID_OS_ARCH))
 
+	mkdir -p \
+		$(BOOTSTRAP_CACHE_DIR) \
+		$(HOST_GO_CACHE_DIR)
+
 	$(call GoCompiler/Bootstrap/Make, \
+		GOCACHE=$(BOOTSTRAP_CACHE_DIR) \
 		CC=$(HOSTCC_NOCACHE) \
 		CXX=$(HOSTCXX_NOCACHE) \
 	)
 
 	$(call GoCompiler/Host/Make, \
 		GOROOT_BOOTSTRAP=$(BOOTSTRAP_BUILD_DIR) \
+		GOCACHE=$(HOST_GO_CACHE_DIR) \
 		CC=$(HOSTCC_NOCACHE) \
 		CXX=$(HOSTCXX_NOCACHE) \
 	)
@@ -206,15 +224,13 @@ endef
 define Build/Compile
 	mkdir -p \
 		$(PKG_GO_HOST_CACHE_DIR) \
-		$(PKG_GO_TARGET_CACHE_DIR) \
-		$(PKG_GO_TMP_DIR)
+		$(PKG_GO_TARGET_CACHE_DIR)
 
 	@echo "Building target Go first stage"
 
 	$(call GoCompiler/Package/Make, \
 		GOROOT_BOOTSTRAP=$(HOST_GO_ROOT) \
 		GOCACHE=$(PKG_GO_HOST_CACHE_DIR) \
-		GOTMPDIR=$(PKG_GO_TMP_DIR) \
 		GO_GCC_HELPER_CC="$(HOSTCC)" \
 		GO_GCC_HELPER_CXX="$(HOSTCXX)" \
 		GO_GCC_HELPER_PATH=$$$$PATH \
@@ -224,6 +240,11 @@ define Build/Compile
 		PATH=$(HOST_GO_ROOT)/openwrt:$$$$PATH \
 	)
 
+  ifneq ($(PKG_GO_ZBOOTSTRAP_MODS),)
+	$(SED) '$(PKG_GO_ZBOOTSTRAP_MODS)' \
+		$(PKG_BUILD_DIR)/src/cmd/internal/objabi/zbootstrap.go
+  endif
+
 	@echo "Building target Go second stage"
 
 	( \
@@ -231,7 +252,7 @@ define Build/Compile
 		$(CP) go go-host ; \
 		GOROOT_FINAL=$(GO_TARGET_ROOT) \
 		GOCACHE=$(PKG_GO_TARGET_CACHE_DIR) \
-		GOTMPDIR=$(PKG_GO_TMP_DIR) \
+		GOENV=off \
 		GO_GCC_HELPER_CC="$(TARGET_CC)" \
 		GO_GCC_HELPER_CXX="$(TARGET_CXX)" \
 		GO_GCC_HELPER_PATH=$$$$PATH \

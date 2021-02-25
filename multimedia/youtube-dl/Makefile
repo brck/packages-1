@@ -8,18 +8,17 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=youtube-dl
-PKG_VERSION:=2019.10.29
+PKG_VERSION:=2021.1.16
 PKG_RELEASE:=1
 
-PKG_SOURCE:=youtube_dl-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=https://files.pythonhosted.org/packages/source/y/youtube_dl/
-PKG_HASH:=0b6611807b0bb978a0384ddebf215ea1f974ecf73d80d04e9f614ff30b1443f0
-PKG_BUILD_DIR:=$(BUILD_DIR)/youtube_dl-$(PKG_VERSION)
+PYPI_NAME:=youtube_dl
+PKG_HASH:=acf74701a31b6c3d06f9d4245a46ba8fb6c378931681177412043c6e8276fee7
 
-PKG_MAINTAINER:=Adrian Panella <ianchi74@outlook.com>, Josef Schlehofer <pepe.schlehofer@gmail.com>
+PKG_MAINTAINER:=Josef Schlehofer <pepe.schlehofer@gmail.com>
 PKG_LICENSE:=Unlicense
 PKG_LICENSE_FILES:=LICENSE
 
+include ../../lang/python/pypi.mk
 include $(INCLUDE_DIR)/package.mk
 include ../../lang/python/python3-package.mk
 

@@ -1,7 +1,7 @@
 #
 # Copyright (C) 2013 Julius Schulz-Zander <julius@net.t-labs.tu-berlin.de>
 # Copyright (C) 2014-2017 OpenWrt.org
-# Copyright (C) 2018-2019 Yousong Zhou <yszhou4tech@gmail.com>
+# Copyright (C) 2018-2020 Yousong Zhou <yszhou4tech@gmail.com>
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -15,11 +15,11 @@ include $(INCLUDE_DIR)/kernel.mk
 #  - Check and update kmod dependencies when necessary (runtime module load check in the least)
 #
 PKG_NAME:=openvswitch
-PKG_VERSION:=2.11.0
-PKG_RELEASE:=3
+PKG_VERSION:=2.11.6
+PKG_RELEASE:=1
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=https://www.openvswitch.org/releases/
-PKG_HASH:=f4b01d7376d7298bc6e7fa7a6067229ca7c7e299394e5ea9aff651d52edfdbee
+PKG_HASH:=1d052272747a790abc51dfadf886a83f96dfdcad7bb4b21b407ae7530e3b9ea2
 
 PKG_LICENSE:=Apache-2.0
 PKG_LICENSE_FILES:=LICENSE
@@ -50,19 +50,21 @@ ovs_kmod_is_intree=$(filter %-intree,$(1))
 ovs_kmod_upstream_name=kmod-$(call ovs_kmod_package_name,$(patsubst %-intree,%,$(1)))
 ovs_kmod_package_provides=$(call ovs_kmod_upstream_name,$(1))
 define OvsKmodPackageTemplate
+ifeq ($(if $(call ovs_kmod_is_intree,$(1)),$(ovs_kmod_intree_not_supported)),)
   define KernelPackage/$(call ovs_kmod_package_name,$(1))
      SECTION:=kernel
      CATEGORY:=Kernel modules
      SUBMENU:=Network Support
      TITLE:=$(ovs_kmod_$(1)_title)
-     DEPENDS:=$(ovs_kmod_$(1)_depends) $(if $(call ovs_kmod_is_intree,$(1)),@DEVEL $(if $(ovs_kmod_intree_not_supported),@BROKEN))
+     DEPENDS:=$(ovs_kmod_$(1)_depends) $(if $(call ovs_kmod_is_intree,$(1)),@IPV6 @DEVEL)
      PROVIDES:=$(call ovs_kmod_package_provides,$(1))
      KCONFIG:=$(ovs_kmod_$(1)_kconfig)
      FILES:=$(ovs_kmod_$(1)_files)
-     AUTOLOAD:=$(call AutoProbe,$(foreach m,$(ovs_kmod_$(1)_files),$(patsubst %.ko,%,$(basename $(m)))))
+     AUTOLOAD:=$(call AutoProbe,$(foreach m,$(ovs_kmod_$(1)_files),$(notdir $(patsubst %.ko,%,$(basename $(m))))))
   endef
 
   ovs_kmod_packages+=$(call ovs_kmod_package_name,$(1))
+endif
 endef
 
 ovs_kmod_openvswitch_title:=Open vSwitch kernel datapath (upstream)
@@ -312,7 +314,11 @@ ovs_intree_kmod_configs:=CONFIG_PACKAGE_kmod-openvswitch-intree
 ovs_intree_kmod_enabled:=$(strip $(foreach c,$(ovs_intree_kmod_configs),$($(c))))
 PKG_CONFIG_DEPENDS+=$(ovs_intree_kmod_configs)
 ifneq ($(ovs_intree_kmod_enabled),)
-  CONFIGURE_ARGS += --with-linux=$(LINUX_DIR)
+  ifeq ($(ovs_kmod_intree_not_supported),)
+    CONFIGURE_ARGS += --with-linux=$(LINUX_DIR)
+  else
+    $(warning XXX: openvswitch: intree kmods selected but not supported)
+  endif
 endif
 
 TARGET_CFLAGS += -flto -std=gnu99
