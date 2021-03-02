@@ -1,7 +1,72 @@
 #!/bin/sh
 
-[ "$ACTION" == "ifup" ] || exit 0
+CHILLI_LOCK=/var/run/chilli-hotplug.lock
+MAX_TRIES=5
+MOJA_IPS_CACHE=/var/run/moja-ips
+RESTART_CHILLI=0
 
-[ "$INTERFACE" = "wan" ] && {
-	/etc/init.d/chilli restart
+restart_chilli() {
+  /etc/init.d/chilli-monitor stop
+  while [ -n "$(pidof chilli)" ]; do
+    /etc/init.d/chilli stop 2>/dev/null
+  done
+  /etc/init.d/chilli-monitor start
+}
+
+[ "$ACTION" == "ifup" ] && {
+  [ -f "$CHILLI_LOCK" ] && exit 0
+  echo "$$" >"$CHILLI_LOCK"
+  
+  # Restart chilli on wifi ifup
+  [ "$INTERFACE" == "wifi" ] && {
+    logger -t chilli-hotplug "Restarting chilli due to ifup on wifi ($DEVICE)"
+    restart_chilli
+  }
+
+  # Get the device associated with $INTERFACE
+  device=$(uci -q -p /var/state get network.$INTERFACE.ifname)
+  gateway_dev=$(ip route show | grep '^default' | awk '{print $5}')
+  wanif=$(grep -oE 'HS_WANIF=[A-Za-z0-9\._-]+' /etc/chilli/defaults | awk -F'=' '{printf "%s" $2}')
+
+  [ "$device" = "$gateway_dev" ] && {
+
+    # Restart radius proxy
+    [ -x /etc/init.d/http_radius_proxy ] && {
+      logger -t chilli-hotplug "Restarting http_radius_proxy [ $ACTION | $INTERFACE ]"
+      /etc/init.d/http_radius_proxy restart
+    }
+
+    net_vpn_status=$(uci -q get openvpn.network.enabled)
+    if [ "$wanif" != "$gateway_dev" -a "$wanif" = 'tun0' -a "$net_vpn_status" = "1" ]; then
+      tries=0
+      # Make a maximum of 5 attempts - spaced out over 30s - to reconnect to the VPN
+      while ! ping -I "$wanif" -q -s1 -c2 -W5 8.8.8.8; do
+        [ "$tries" -ge "$MAX_TRIES"] && break
+        logger -t chilli-hotplug 'VPN tunnel not passing traffic. Restarting...'
+        /etc/init.d/openvpn restart 2>/dev/null
+        sleep 30
+        tries=$((tries+1))
+      done
+    fi
+
+    #  Restart openvpn if management VPN is enabled.
+    #  Firewall rules will be reapplied if the VPN comes up
+    mgmt_vpn_status=$(uci -q get openvpn.management.enabled)
+    if [ "$mgmt_vpn_status" == "1" ]; then
+      if ! ip link show tun1 2>/dev/null; then 
+        logger -t chilli-hotplug "Restarting Management VPN on gateway device $device ifup"
+        /etc/init.d/openvpn restart 2>/dev/null
+      fi
+    fi
+
+    # Only restart chilli if the vpn reconnection was successful
+    # or if mojawifi.com IPS cache was updated
+    if [ "$tries" -lt "$MAX_TRIES" -o "$RESTART_CHILLI" = '1' ]; then
+      RESTART_CHILLI=0
+      logger -t chilli-hotplug "Restarting coova-chilli due to $ACTION on $INTERFACE"
+      restart_chilli
+    fi
+  }
+
+  rm -f "$CHILLI_LOCK"
 }
