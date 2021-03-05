@@ -1,0 +1,39 @@
+From f4ccad611dc41b951262fede616b152efe56ed09 Mon Sep 17 00:00:00 2001
+From: Murithi Borona <6918709+bmurithi@users.noreply.github.com>
+Date: Fri, 26 Feb 2021 13:43:07 +0300
+Subject: [PATCH] add config_ipv6_offlink_mtu option
+
+---
+ conffile.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/conffile.c b/conffile.c
+index ec6433c..6c10b30 100644
+--- a/conffile.c
++++ b/conffile.c
+@@ -332,6 +332,17 @@ static void config_strict_fh(int ln, int arg_count, char **args)
+ 	}
+ }
+ 
++static void config_ipv6_offlink_mtu(int ln, int arg_count, char **args)
++{
++   long ipv6_offlink_mtu = strtol(args[0], NULL, 10);
++   if (ipv6_offlink_mtu >= 1280) {
++       gcfg->ipv6_offlink_mtu = ipv6_offlink_mtu;
++   } else {
++       slog(LOG_CRIT, "Error: invalid value for ipv6-offlink-mtu\n");
++       exit(1);
++   }
++}
++
+ struct {
+ 	char *name;
+ 	void (*config_func)(int ln, int arg_count, char **args);
+@@ -345,6 +356,7 @@ struct {
+ 	{ "dynamic-pool", config_dynamic_pool, 1 },
+ 	{ "data-dir", config_data_dir, 1 },
+ 	{ "strict-frag-hdr", config_strict_fh, 1 },
++	{ "ipv6-offlink-mtu", config_ipv6_offlink_mtu, 1 },
+ 	{ NULL, NULL, 0 }
+ };
+ 
