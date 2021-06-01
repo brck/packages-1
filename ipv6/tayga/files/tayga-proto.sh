@@ -9,13 +9,27 @@
 	init_proto "$@"
 }
 
+MESH_MAC_PATH="/sys/class/net/wlan0/address"
+
+mac_to_ipv6_addr() {
+  [ -e "$MESH_MAC_PATH" ] && {
+	  mac=$(cat "$MESH_MAC_PATH")
+	  ipv6_address=$1$(printf %02x $((0x${mac%%:*} ^ 2)))
+	  mac=${mac#*:}
+	  ipv6_address=$ipv6_address${mac%:*:*:*}ff:fe
+	  mac=${mac#*:*:}
+	  ipv6_address=$ipv6_address${mac%:*}${mac##*:}
+	  echo "${ipv6_address}"
+  }
+}
+
 proto_tayga_setup() {
 	local cfg="$1"
 	local iface="$2"
-	local link="tayga-$cfg"
+	local link="$cfg"
 
-	local ipv4_addr ipv6_addr prefix dynamic_pool ipaddr ip6addr noroutes
-	json_get_vars ipv4_addr ipv6_addr prefix dynamic_pool ipaddr ip6addr noroutes
+	local ipv4_addr ipv6_addr prefix dynamic_pool ipaddr ip6addr noroutes ipv6_offlink_mtu
+	json_get_vars ipv4_addr ipv6_addr prefix dynamic_pool ipaddr ip6addr noroutes ipv6_offlink_mtu
 	[ -z "$ipv4_addr" -o -z "$prefix" ] && {
 		proto_notify_error "$cfg" "REQUIRED_PARAMETERS_MISSING"
 		proto_block_restart "$cfg"
@@ -35,6 +49,8 @@ proto_tayga_setup() {
 	[ -n "$dynamic_pool" ] &&
 		echo "dynamic-pool $dynamic_pool" >>$tmpconf
 	echo "data-dir /var/run/tayga/$cfg" >>$tmpconf
+	[ -n "$ipv6_offlink_mtu"  ] &&
+		echo "ipv6-offlink-mtu $ipv6_offlink_mtu" >>$tmpconf
 	#TODO: Support static mapping of IPv4 <-> IPv6
 
 	# here we create TUN device and check configuration
@@ -47,7 +63,19 @@ proto_tayga_setup() {
 
 	proto_init_update "$link" 1
 
-	[ -n "$ipaddr" ]  && proto_add_ipv4_address "$ipaddr" "255.255.255.255"
+	[ -n "$ipv6_offlink_mtu"  ] &&
+		/sbin/ip link set dev "$link" mtu "$ipv6_offlink_mtu"
+
+	[ -n "$ipaddr" ]  &&
+		proto_add_ipv4_address "$ipaddr" "255.255.255.255"
+	[ -n "$ipaddr" ] && {
+		ipv6_mapped=$(mac_to_ipv6_addr "fd00::")
+		if [ -n "$ipv6_mapped" ]; then
+			echo "map $ipaddr $ipv6_mapped" >>$tmpconf
+		else
+			proto_notify_error "$cfg" "FAILED_TO_GET_MESH_MAC"
+		fi
+	}
 	[ -n "$ip6addr" ] && proto_add_ipv6_address "$ip6addr" "128"
 
 	[ "$noroutes" != 1 ] && {
@@ -89,6 +117,7 @@ proto_tayga_init_config() {
 	proto_config_add_string "ipaddr"
 	proto_config_add_string "ip6addr:ip6addr"
 	proto_config_add_boolean "noroutes"
+	proto_config_add_int "ipv6_offlink_mtu"
 }
 
 [ -n "$INCLUDE_ONLY" ] || {

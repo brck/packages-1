@@ -8,15 +8,15 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=python-six
-PKG_VERSION:=1.13.0
-PKG_RELEASE:=1
+PKG_VERSION:=1.15.0
+PKG_RELEASE:=2
 
 PYPI_NAME:=six
-PKG_HASH:=30f610279e8b2578cab6db20741130331735c781b56053c59c4076da27f06b66
+PKG_HASH:=30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259
 
 PKG_LICENSE:=MIT
 PKG_LICENSE_FILES:=LICENSE
-PKG_MAINTAINER:=Jeffery To <jeffery.to@gmail.com>, Alexandru Ardelean <ardeleanalex@gmail.com>
+PKG_MAINTAINER:=BRCK <dev@brck.com>
 
 HOST_BUILD_DEPENDS:=python3/host
 
