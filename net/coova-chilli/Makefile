@@ -12,12 +12,12 @@ PKG_VERSION:=1.4.5-xwf
 PKG_MAINTAINER:=Jaehoon You <teslamint@gmail.com>
 PKG_LICENSE:=GPL-2.0+
 PKG_LICENSE_FILES:=COPYING
-PKG_RELEASE:=19
+PKG_RELEASE:=21
 
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git@github.com:brck/xwf_coova.git
-PKG_SOURCE_VERSION:=91f596a567bc3ef803e24f7bc0bfe3a96d367a27
+PKG_SOURCE_VERSION:=76db6493c2c35e63e7df50523104337b3ad26285
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_SOURCE_SUBDIR).tar.gz
 
@@ -176,6 +176,7 @@ define Package/coova-chilli/install
 	$(INSTALL_DATA) files/chilli.config $(1)/etc/config/chilli
 	$(INSTALL_DIR) $(1)/lib/firewall
 	$(CP) files/chilli.firewall $(1)/lib/firewall/chilli.sh
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/xwfchilli_disconnect_event_handler.sh $(1)/etc/chilli/
 endef
 
 
